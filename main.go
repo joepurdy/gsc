@@ -7,7 +7,29 @@ import (
 	"strings"
 )
 
+var usage = func() {
+	fmt.Fprintf(os.Stderr, "Usage: %s [git repo]\n", os.Args[0])
+	fmt.Fprintf(os.Stderr, "\nParameters:\n\t[git repo] - valid git repository url. Accepts HTTPS or SSH protocols\n")
+}
+
+var parseHelp = func() bool {
+	switch os.Args[1] {
+	case "--help":
+		return true
+	case "-help":
+		return true
+	case "-h":
+		return true
+	default:
+		return false
+	}
+}
+
 func main() {
+	if len(os.Args) < 2 || parseHelp() {
+		usage()
+		return
+	}
 	repo := os.Args[1]
 
 	path, err := parseGitRepo(repo)
