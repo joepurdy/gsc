@@ -21,3 +21,14 @@ build:
         name: copy files to wercker output
         code: |
           cp -R ./ ${WERCKER_OUTPUT_DIR}
+
+deploy:
+ steps:
+   - internal/docker-push:
+       username: $DOCKER_USERNAME
+       password: $DOCKER_PASSWORD
+       entrypoint: /pipeline/source/go-src-clone
+       cmd: --help
+       tag: latest
+       repository: joepurdy/go-src-clone
+       registry: https://registry.hub.docker.com
