@@ -9,7 +9,7 @@ import (
 
 var usage = func() {
 	fmt.Fprintf(os.Stderr, "Usage: %s [git repo]\n", os.Args[0])
-	fmt.Fprintf(os.Stderr, "\nParameters:\n\t[git repo] - valid git repository url. Accepts HTTPS or SSH protocols\n")
+	fmt.Fprintf(os.Stderr, "\nParameters:\n\t[git repo] - valid git repository url. Accepts HTTPS, SSH, and Keybase.io protocols\n")
 }
 
 var parseHelp = func() bool {
@@ -47,15 +47,35 @@ func checkErr(err error) {
 }
 
 func parseGitRepo(repo string) (string, error) {
-	if !strings.HasSuffix(repo, ".git") {
-		return "", fmt.Errorf("Unknown Repo Format: %s", repo)
+	var protocol string
+	if strings.HasPrefix(repo, "keybase://") {
+		protocol = "keybase"
+	} else if strings.HasPrefix(repo, "https://") {
+		protocol = "https"
+	} else {
+		if strings.Contains(repo, "@") {
+			protocol = "ssh"
+		}
 	}
 
-	repo = strings.TrimSuffix(repo, ".git")
-	if strings.HasPrefix(repo, "https://") {
+	switch protocol {
+	case "keybase":
+		repo = strings.Replace(repo, "://private", "", 1)
+		repo = strings.Replace(repo, "://team", "", 1)
+	case "https":
+		if !strings.HasSuffix(repo, ".git") {
+			return "", fmt.Errorf("Unknown Repo Format: %s", repo)
+		}
+		repo = strings.TrimSuffix(repo, ".git")
 		repo = strings.TrimPrefix(repo, "https://")
-	} else if strings.Contains(repo, "@") {
+	case "ssh":
+		if !strings.HasSuffix(repo, ".git") {
+			return "", fmt.Errorf("Unknown Repo Format: %s", repo)
+		}
+		repo = strings.TrimSuffix(repo, ".git")
 		repo = strings.Replace(strings.Split(repo, "@")[1], ":", "/", 1)
+	default:
+		return "", fmt.Errorf("Unknown Repo Format: %s", repo)
 	}
 
 	return repo, nil
