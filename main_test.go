@@ -45,3 +45,18 @@ func TestParsesSSH(t *testing.T) {
 		}
 	}
 }
+
+func TestParsesKeybase(t *testing.T) {
+	var tests = []struct {
+		input string
+		want  string
+	}{
+		{"keybase://private/user/repo", "keybase/user/repo"},
+		{"keybase://team/teamname/repo", "keybase/teamname/repo"},
+	}
+	for _, test := range tests {
+		if got, _ := parseGitRepo(test.input); got != test.want {
+			t.Errorf("parseGitRepo(%q) = %v", test.input, got)
+		}
+	}
+}
