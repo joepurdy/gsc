@@ -3,7 +3,7 @@ box: golang
 build:
   steps:
     - setup-go-workspace:
-      package-dir: github.com/joepurdy/go-src-clone
+      package-dir: github.com/joepurdy/gsc
 
     # Build the project
     - script:
@@ -27,8 +27,8 @@ deploy:
    - internal/docker-push:
        username: $DOCKER_USERNAME
        password: $DOCKER_PASSWORD
-       entrypoint: /pipeline/source/go-src-clone
+       entrypoint: /pipeline/source/gsc
        cmd: --help
        tag: latest
-       repository: joepurdy/go-src-clone
+       repository: joepurdy/gsc
        registry: https://registry.hub.docker.com
