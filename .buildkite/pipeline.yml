@@ -8,9 +8,9 @@ steps:
   - label: "upload test analytics"
     depends_on: test
     command: |
-      buildkite-agent artifact download test.json tmp/ --step test
+      buildkite-agent artifact download test.json . --step test
 
-      cat /tmp/test.json | buildkite-test-analytics-go \
+      cat test.json | buildkite-test-analytics-go \
         --api-token=$BUILDKITE_ANALYTICS_TOKEN \
         --key=$BUILDKITE_BUILD_ID \
         --build-number=$BUILDKITE_BUILD_NUMBER \
