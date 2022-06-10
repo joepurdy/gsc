@@ -1,8 +1,8 @@
 steps:
   - label: ":go: test"
-    command: "gotestsum --junitfile junit.xml"
+    command: "gotestsum --jsonfile test.json"
     plugins:
       - test-collector#v1.0.0:
-          files: "junit.xml"
-          format: "junit"
+          files: "test.json"
+          format: "json"
     
