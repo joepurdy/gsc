@@ -11,12 +11,12 @@ steps:
       buildkite-agent artifact download test.json . --step test
 
       cat test.json | buildkite-test-analytics-go \
-        --api-token=$BUILDKITE_ANALYTICS_TOKEN \
-        --key=$BUILDKITE_BUILD_ID \
-        --build-number=$BUILDKITE_BUILD_NUMBER \
+        --api-token="$BUILDKITE_ANALYTICS_TOKEN" \
+        --key="$BUILDKITE_BUILD_ID" \
+        --build-number="$BUILDKITE_BUILD_NUMBER" \
         --ci=buildkite \
-        --job-id=$BUILDKITE_JOB_ID \
-        --branch=$BUILDKITE_BRANCH \
-        --commit-sha=$BUILDKITE_COMMIT \
-        --message=$BUILDKITE_MESSAGE \
-        --build-url=$BUILDKITE_BUILD_URL
+        --job-id="$BUILDKITE_JOB_ID" \
+        --branch="$BUILDKITE_BRANCH" \
+        --commit-sha="$BUILDKITE_COMMIT" \
+        --message="$BUILDKITE_MESSAGE" \
+        --build-url="$BUILDKITE_BUILD_URL"
