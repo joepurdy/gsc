@@ -1,7 +1,7 @@
 steps:
   - label: "Go Tests"
-    command: "gotestsum --junit junit.xml -- ./..."
-    
+    command: "gotestsum --junit junit.xml"
+
   - label: "Upload Test Analytics"
     key: upload-test-analytics
     command: |
