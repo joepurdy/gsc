@@ -1,2 +1,3 @@
 tasks:
-  - command: go test ./...
+  - before: go install gotest.tools/gotestsum@latest
+    command: gotestsum
