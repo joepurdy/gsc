@@ -1,8 +1,22 @@
 steps:
   - label: ":go: test"
+    key: test
     command: "gotestsum --jsonfile test.json"
-    plugins:
-      - test-collector#v1.0.0:
-          files: "test.json"
-          format: "json"
+    artifact_paths: 
+      - test.json
     
+  - label: "upload test analytics"
+    depends_on: test
+    command: |
+      buildkite-agent artifact download test.json tmp/ --step test
+
+      cat /tmp/test.json | buildkite-test-analytics-go \
+        --api-token=$BUILDKITE_ANALYTICS_TOKEN \
+        --key=$BUILDKITE_BUILD_ID \
+        --build-number=$BUILDKITE_BUILD_NUMBER \
+        --ci=buildkite \
+        --job-id=$BUILDKITE_JOB_ID \
+        --branch=$BUILDKITE_BRANCH \
+        --commit-sha=$BUILDKITE_COMMIT \
+        --message=$BUILDKITE_MESSAGE \
+        --build-url=$BUILDKITE_BUILD_URL
